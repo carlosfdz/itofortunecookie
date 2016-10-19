@@ -1,5 +1,24 @@
 // Cargando el modulo http
 var http = require('http');
+// Cargar las libreria colors
+var colors = require('colors');
+// Generando un tema
+colors.setTheme({
+  silly: 'rainbow',
+  input: 'grey',
+  verbose: 'cyan',
+  prompt: 'grey',
+  info: 'green',
+  data: 'grey',
+  help: 'cyan',
+  warn: 'yellow',
+  debug: 'blue',
+  error: 'red'
+});
+
+// Obteniendo configuraciones
+var IP = '127.0.0.1';
+var PORT = 3000;
 
 //Crando el server
 var server = http.createServer(function(req,res){
@@ -14,6 +33,6 @@ var server = http.createServer(function(req,res){
     res.end();
 });
 // Poniendo a escuchar al server
-server.listen(3000,'127.0.0.1',function(){
-    console.log("> Server escuchando en " + "http://127.0.0.1:3000/ ...");
+server.listen(PORT,IP,function(){
+    console.log("> Server escuchando en ".info + `http://${IP}:${PORT}/ ...`.info);
 });
