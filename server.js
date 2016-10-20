@@ -2,6 +2,8 @@
 var http = require('http');
 // Cargando libreri path
 var path = require('path');
+// Cargando la libreria mime
+var mime = require('mime');
 // Cargando la libreria colors
 var colors = require('colors');
 var fs = require('fs');
@@ -42,17 +44,7 @@ var server = http.createServer(function(req,res){
     var extname = path.extname(urlPath);
     // Seleccionar el contet-type con base
     // en el extname
-    var contentType = 'text/plain';
-    switch(extname){
-        case '.html':
-            contentType = 'text/html';
-            break;
-        case '.js':
-            contentType = 'text/javascript';
-            break;
-        case '.css':
-            contentType = 'text/css'
-    };
+    var contentType = mime.lookup(urlPath);
     fs.exists(urlPath,function(exists){
         if(!exists){
             // No  existe
