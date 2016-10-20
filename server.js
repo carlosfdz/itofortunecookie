@@ -44,6 +44,9 @@ var server = http.createServer(function(req,res){
     // en el extname
     var contentType = 'text/plain';
     switch(extname){
+        case '.html':
+            contentType = 'text/html';
+            break;
         case '.js':
             contentType = 'text/javascript';
             break;
@@ -59,7 +62,21 @@ var server = http.createServer(function(req,res){
             res.end('<h1>404 NOT FOUND... :(</h1>');
         }else{
             // Si existe
-            res.end(`${urlPath} existe`);
+            // Leemos el archivo y lo servimos
+            fs.readFile(urlPath,function(err, content){
+                if(err){
+                    res.writeHead(500,{
+                        'Content-Type':'text/html'
+                    });
+                    res.end('<h1 style="color: red">500 ERROR</h1>');                    
+                }else{
+                    // Si pudo leer el archivo
+                    res.writeHead(200,{
+                        'Content-Type':contentType
+                    });
+                    res.end(content);
+                }
+            });
         }
     });
 });
