@@ -24,21 +24,44 @@ var config = require('./config/config');
 var IP = config.IP;
 var PORT = config.PORT;
 
-var counter = 0; 
+var counter = 0;
 // Creando el server
 var server = http.createServer(function(req,res){
     var urlPath = req.url;
     console.log(`> URL solicitada: ${urlPath}`.silly);
     if(urlPath == '/'){
         // Genera una ruta hacia el index.html
-        urlPath = path.resolve('./static/index.html');    
-        res.end(`> Se sirve esta ${urlPath}`);   
+        urlPath = path.resolve('./static/index.html');
     }else{
         // Genera una ruta dentro de static
         urlPath = 
-        path.resolve(config.STATIC_PATH + urlPath);
-        res.end(`> Se sirve ${urlPath}`);
+        path.resolve(config.STATIC_PATH + urlPath);        
     }
+    // Exratyendo la extencion de lo que
+    // vamos a servir
+    var extname = path.extname(urlPath);
+    res.end(`> Extencion a servir: ${extname}`);
+    // Seleccionar el contet-type con base
+    // en el extname
+    var contentType = 'text/plain';
+    switch(extname){
+        case '.js':
+            contentType = 'text/javascript';
+            break;
+        case '.css':
+            contentType = 'text/css'
+    };
+    fs.exists(urlPath,function(exists){
+        if(!exists){
+            // No  existe
+            res.writeHead(404,{
+                'Content-Type':'text/html'
+            });
+            res.end('<h1>404 NOT FOUND... :(</h1>');
+        }else{
+            // Si existe
+        }
+    });
 });
 // Poniendo a escuchar
 // al server
