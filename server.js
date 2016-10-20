@@ -40,7 +40,6 @@ var server = http.createServer(function(req,res){
     // Exratyendo la extencion de lo que
     // vamos a servir
     var extname = path.extname(urlPath);
-    res.end(`> Extencion a servir: ${extname}`);
     // Seleccionar el contet-type con base
     // en el extname
     var contentType = 'text/plain';
@@ -60,6 +59,7 @@ var server = http.createServer(function(req,res){
             res.end('<h1>404 NOT FOUND... :(</h1>');
         }else{
             // Si existe
+            res.end(`${urlPath} existe`);
         }
     });
 });
