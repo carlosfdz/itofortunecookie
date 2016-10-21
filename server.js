@@ -4,6 +4,8 @@ var http = require('http');
 var path = require('path');
 // Cargando la libreria mime
 var mime = require('mime');
+// Cargando servidor estatico
+var staticServer = require('./internals/static-server');
 // Cargando la libreria colors
 var colors = require('colors');
 var fs = require('fs');
@@ -28,49 +30,14 @@ var PORT = config.PORT;
 
 var counter = 0;
 // Creando el server
-var server = http.createServer(function(req,res){
-    var urlPath = req.url;
-    console.log(`> URL solicitada: ${urlPath}`.silly);
-    if(urlPath == '/'){
-        // Genera una ruta hacia el index.html
-        urlPath = path.resolve('./static/index.html');
+var server = http.createServer(function(req, res){
+    var url = req.url;
+    console.log(`> URL solicitada: ${url}`.silly);
+    if(url== "/"){
+        url = "/indez.html";
     }else{
-        // Genera una ruta dentro de static
-        urlPath = 
-        path.resolve(config.STATIC_PATH + urlPath);        
+        staticServer.serve(url, res);
     }
-    // Exratyendo la extencion de lo que
-    // vamos a servir
-    var extname = path.extname(urlPath);
-    // Seleccionar el contet-type con base
-    // en el extname
-    var contentType = mime.lookup(urlPath);
-    fs.exists(urlPath,function(exists){
-        if(!exists){
-            // No  existe
-            res.writeHead(404,{
-                'Content-Type':'text/html'
-            });
-            res.end('<h1>404 NOT FOUND... :(</h1>');
-        }else{
-            // Si existe
-            // Leemos el archivo y lo servimos
-            fs.readFile(urlPath,function(err, content){
-                if(err){
-                    res.writeHead(500,{
-                        'Content-Type':'text/html'
-                    });
-                    res.end('<h1 style="color: red">500 ERROR</h1>');                    
-                }else{
-                    // Si pudo leer el archivo
-                    res.writeHead(200,{
-                        'Content-Type':contentType
-                    });
-                    res.end(content);
-                }
-            });
-        }
-    });
 });
 // Poniendo a escuchar
 // al server
