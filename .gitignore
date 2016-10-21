@@ -1,2 +1,4 @@
 # ignorando modulos externos de node
 node_modules
+# ignorando modulos del frontend
+static/vendor
