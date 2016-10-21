@@ -6,8 +6,7 @@ var fs = require('fs'),
 // Exportar funcionalidad de
 // server estatico de archivos
 exports.serve = function(url, res){
-    urlPath = 
-    path.resolve(config.STATIC_PATH + url);        
+    var urlPath = path.resolve(config.STATIC_PATH + url);        
     // Exratyendo la extencion de lo que
     // vamos a servir
     var extname = path.extname(urlPath);

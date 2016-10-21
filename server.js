@@ -6,6 +6,8 @@ var path = require('path');
 var mime = require('mime');
 // Cargando servidor estatico
 var staticServer = require('./internals/static-server');
+// Cargando manejador
+var handlers = require('./internals/handlers');
 // Cargando la libreria colors
 var colors = require('colors');
 var fs = require('fs');
@@ -34,8 +36,12 @@ var server = http.createServer(function(req, res){
     var url = req.url;
     console.log(`> URL solicitada: ${url}`.silly);
     if(url== "/"){
-        url = "/indez.html";
+        url = "/index.html";
+    }
+    if(typeof(handlers[url]) === 'function'){
+        handlers[url](req, res);
     }else{
+        console.log("> Servimos estaticamente ...");
         staticServer.serve(url, res);
     }
 });
